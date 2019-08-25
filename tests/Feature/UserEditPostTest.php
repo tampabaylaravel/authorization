@@ -12,7 +12,7 @@ class UserEditPostTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_edit_a_post()
+    public function a_user_can_edit_their_own_post()
     {
         $user = factory(User::class)->create();
         $post = factory(Post::class)->make();
@@ -29,5 +29,26 @@ class UserEditPostTest extends TestCase
         $this->assertEquals('New Body', $post->body);
 
         $response->assertRedirect(route('posts.show', $post));
+    }
+
+    /** @test */
+    public function a_user_cannot_edit_a_different_users_post()
+    {
+        $user = factory(User::class)->create();
+        $anotherUsersPost = factory(Post::class)->create([
+            'title' => 'A Title',
+            'body' => 'A Body',
+        ]);
+
+        $response = $this->actingAs($user)->patch(route('posts.update', $anotherUsersPost), [
+            'title' => 'New Title',
+            'body' => 'New Body',
+        ]);
+
+        $anotherUsersPost->refresh();
+        $this->assertEquals('A Title', $anotherUsersPost->title);
+        $this->assertEquals('A Body', $anotherUsersPost->body);
+
+        $response->assertStatus(403);
     }
 }

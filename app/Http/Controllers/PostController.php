@@ -73,6 +73,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if (!$request->user()->is($post->user)) {
+            return response(null, 403);
+        }
+
         $post->update($request->all());
 
         return redirect()->route('posts.show', $post);
