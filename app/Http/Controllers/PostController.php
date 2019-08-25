@@ -73,7 +73,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        if (!$request->user()->is($post->user)) {
+        if (!$request->user()->is($post->user) && !$request->user()->is_admin) {
             return response(null, 403);
         }
 

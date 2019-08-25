@@ -51,4 +51,25 @@ class UserEditPostTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    /** @test */
+    public function admin_can_edit_any_post()
+    {
+        $admin = factory(User::class)->states('admin')->create();
+        $anotherUsersPost = factory(Post::class)->create([
+            'title' => 'A Title',
+            'body' => 'A Body',
+        ]);
+
+        $response = $this->actingAs($admin)->patch(route('posts.update', $anotherUsersPost), [
+            'title' => 'New Title',
+            'body' => 'New Body',
+        ]);
+
+        $anotherUsersPost->refresh();
+        $this->assertEquals('New Title', $anotherUsersPost->title);
+        $this->assertEquals('New Body', $anotherUsersPost->body);
+
+        $response->assertRedirect(route('posts.show', $anotherUsersPost));
+    }
 }
