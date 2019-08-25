@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -73,7 +74,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        abort_if(!$request->user()->canEditPost($post), 403);
+        abort_if(!Gate::allows('edit-post', $post), 403);
 
         $post->update($request->all());
 
