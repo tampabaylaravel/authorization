@@ -13,7 +13,7 @@ class AuthorizationViaMiddlewareTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function policy_can_be_applied_via_middleware()
+    public function gate_can_be_applied_via_middleware()
     {
         $user = factory(User::class)->create();
         $foo = factory(Foo::class)->create();

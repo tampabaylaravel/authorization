@@ -24,4 +24,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('posts', 'PostController')->middleware('auth');
 Route::get('/foo/{foo}', function (Foo $foo) {
     return $foo->title;
-})->name('foo')->middleware('can:view,foo');
+})->name('foo')->middleware('can:bar,foo');
