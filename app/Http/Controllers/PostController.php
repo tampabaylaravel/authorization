@@ -74,7 +74,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        abort_unless(Gate::allows('edit-post', $post), 403);
+        $this->authorize('edit-post', $post);
 
         $post->update($request->all());
 
