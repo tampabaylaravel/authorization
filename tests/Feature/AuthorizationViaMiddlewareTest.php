@@ -41,7 +41,7 @@ class AuthorizationViaMiddlewareTest extends TestCase
         $foo = factory(Foo::class)->create();
 
         // Does anybody know why this works?
-        $user->addPermission('bar');
+        $user->addPermission('bar-foo');
 
         $response = $this->actingAs($user)->get(route('foo', $foo));
 

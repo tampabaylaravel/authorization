@@ -53,6 +53,29 @@ class UserEditPostTest extends TestCase
     }
 
     /** @test */
+    public function a_user_with_permission_can_edit_a_different_users_post()
+    {
+        $user = factory(User::class)->create();
+        $anotherUsersPost = factory(Post::class)->create([
+            'title' => 'A Title',
+            'body' => 'A Body',
+        ]);
+
+        $user->addPermission('update-post');
+
+        $response = $this->actingAs($user)->patch(route('posts.update', $anotherUsersPost), [
+            'title' => 'New Title',
+            'body' => 'New Body',
+        ]);
+
+        $anotherUsersPost->refresh();
+        $this->assertEquals('New Title', $anotherUsersPost->title);
+        $this->assertEquals('New Body', $anotherUsersPost->body);
+
+        $response->assertStatus(302);
+    }
+
+    /** @test */
     public function admin_can_edit_any_post()
     {
         $admin = factory(User::class)->states('admin')->create();
