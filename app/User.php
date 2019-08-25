@@ -41,4 +41,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function canEditPost(Post $post)
+    {
+        // Note: for consistency we left is_admin last, however, it would be
+        // best to let is_admin go first to potentially short circuit and avoid
+        // the extra database call.
+        return $this->is($post->user) || $this->is_admin;
+    }
 }

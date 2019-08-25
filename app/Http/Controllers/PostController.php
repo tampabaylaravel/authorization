@@ -73,9 +73,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $userCanEditPost = $request->user()->is($post->user) || $request->user()->is_admin;
-
-        abort_if(!$userCanEditPost, 403);
+        abort_if(!$request->user()->canEditPost($post), 403);
 
         $post->update($request->all());
 
