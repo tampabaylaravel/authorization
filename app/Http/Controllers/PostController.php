@@ -76,7 +76,7 @@ class PostController extends Controller
         $userCanEditPost = $request->user()->is($post->user) || $request->user()->is_admin;
 
         if (!$userCanEditPost) {
-            return response(null, 403);
+            abort(403);
         }
 
         $post->update($request->all());
