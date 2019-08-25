@@ -35,7 +35,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = Post::create($request->all());
+        $post = $request->user()->posts()->create($request->all());
 
         return redirect()->route('posts.show', $post);
     }
@@ -73,7 +73,9 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post->update($request->all());
+
+        return redirect()->route('posts.show', $post);
     }
 
     /**
