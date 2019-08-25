@@ -74,7 +74,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        abort_if(Gate::denies('edit-post', $post), 403);
+        abort_unless(Gate::allows('edit-post', $post), 403);
 
         $post->update($request->all());
 
