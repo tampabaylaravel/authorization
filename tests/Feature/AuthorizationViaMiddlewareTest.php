@@ -33,4 +33,18 @@ class AuthorizationViaMiddlewareTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /** @test */
+    public function non_admin_user_can_still_be_authorized_for_foo_route()
+    {
+        $user = factory(User::class)->create();
+        $foo = factory(Foo::class)->create();
+
+        // Does anybody know why this works?
+        $user->addPermission('bar');
+
+        $response = $this->actingAs($user)->get(route('foo', $foo));
+
+        $response->assertStatus(200);
+    }
 }

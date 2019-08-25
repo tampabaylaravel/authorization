@@ -28,6 +28,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    private $permissions = [];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -40,5 +42,21 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    // Normally we'd see permissions as a relationship, like so:
+    //public function permissions()
+    //{
+        //return $this->belongsToMany(Permission::class);
+    //}
+
+    public function addPermission($permission)
+    {
+        $this->permissions[] = $permission;
+    }
+
+    public function hasPermission($permission)
+    {
+        return collect($this->permissions)->contains($permission);
     }
 }
