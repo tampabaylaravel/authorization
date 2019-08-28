@@ -1,5 +1,8 @@
 <?php
 
+use App\Foo;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,3 +22,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('posts', 'PostController')->middleware('auth');
+Route::get('foo/{foo}', function (Foo $foo) {
+    return $foo;
+})->name('foo')->middleware('can:view,foo');
+Route::get('menke', function () {
+    return 'menke';
+})->middleware('can:menke');

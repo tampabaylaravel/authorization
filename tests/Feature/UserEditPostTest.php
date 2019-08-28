@@ -55,6 +55,7 @@ class UserEditPostTest extends TestCase
     /** @test */
     public function admin_can_edit_any_post()
     {
+        $this->withoutExceptionHandling();
         $admin = factory(User::class)->states('admin')->create();
         $anotherUsersPost = factory(Post::class)->create([
             'title' => 'A Title',

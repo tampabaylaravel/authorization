@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    private $permissions = [];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -40,5 +42,25 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    //public function permissions()
+    //{
+        //$this->belongsToMany(Permission::class);
+    //}
+
+    public function addPermission($permission)
+    {
+        $this->permissions[] = $permission;
+    }
+
+    public function hasPermission($permission)
+    {
+        return collect($this->permissions)->contains($permission);
+    }
+
+    public function canEditPost($post)
+    {
+        return $this->is_admin || $this->is($post->user);
     }
 }

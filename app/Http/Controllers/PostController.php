@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -73,10 +79,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        if (!$request->user()->is($post->user) && !$request->user()->is_admin) {
-            return response(null, 403);
-        }
-
         $post->update($request->all());
 
         return redirect()->route('posts.show', $post);
